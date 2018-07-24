@@ -1,10 +1,10 @@
-﻿@using HelloBlazor.CRUD.Shared.Models;
-@page "/employees"
+﻿@page "/employees"
+@using HelloBlazor.CRUD.Shared.Models;
 @inject HttpClient httpClient
 
 <h1>Employees</h1>
 <p>
-    <a href="/add">Create New</a>
+    <a href="/addemployee">Create New</a>
 </p>
 
 @if (!employees.Any())
@@ -25,19 +25,19 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach(var employee in employees)
+            @foreach (var employee in employees)
             {
-            <tr>
-                <td>@employee.EmployeeId</td>
-                <td>@employee.Name</td>
-                <td>@employee.Gender</td>
-                <td>@employee.Department</td>
-                <td>@employee.City</td>
-                <td>
-                    <a href="/edit">Edit</a>
-                    <a href="/delete">Delete</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@employee.EmployeeId</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.Gender</td>
+                    <td>@employee.Department</td>
+                    <td>@employee.City</td>
+                    <td>
+                        <a href="/edit">Edit</a>
+                        <a href="/delete">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
