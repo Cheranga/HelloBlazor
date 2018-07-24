@@ -1,0 +1,55 @@
+﻿@using HelloBlazor.CRUD.Shared.Models;
+@page "/employees"
+@inject HttpClient httpClient
+
+<h1>Employees</h1>
+<p>
+    <a href="/add">Create New</a>
+</p>
+
+@if (!employees.Any())
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Department</th>
+                <th>City</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var employee in employees)
+            {
+            <tr>
+                <td>@employee.EmployeeId</td>
+                <td>@employee.Name</td>
+                <td>@employee.Gender</td>
+                <td>@employee.Department</td>
+                <td>@employee.City</td>
+                <td>
+                    <a href="/edit">Edit</a>
+                    <a href="/delete">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@functions{
+    List<Employee> employees = new List<Employee>();
+
+    protected override async Task OnInitAsync()
+    {
+        employees = await httpClient.GetJsonAsync<List<Employee>>("/api/Employees");
+    }
+}

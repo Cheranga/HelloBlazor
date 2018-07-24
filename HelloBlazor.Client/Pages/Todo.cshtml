@@ -1,0 +1,33 @@
+﻿@using  HelloBlazor.Shared
+@page "/todo"
+
+<H1>Todo (@todoItems.Where(x=>x.IsDone == false).Count())</H1>
+<div class="form-group">
+    <input class="form-control" placeholder="Something to do" bind="@newTodo" />
+    <button class="btn btn-sm btn-primary" onclick="@AddTodo">Add</button>
+</div>
+
+
+<ul>
+    @foreach(var item in todoItems){ 
+        <li>
+            <input type="checkbox" class="form-control" bind="@item.IsDone" />
+            <input type="text" bind="@item.Title" />
+        </li>
+    }
+</ul>
+
+
+@functions{
+    string newTodo = "";
+    List<TodoItem> todoItems = new List<TodoItem>();
+
+    void AddTodo()
+    {
+        if(!string.IsNullOrEmpty(newTodo))
+        {
+            todoItems.Add(new TodoItem { Title = newTodo });
+            newTodo = string.Empty;
+        }
+    }
+}
