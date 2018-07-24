@@ -11,7 +11,7 @@
         <form>
             <div class="form-group">
                 <label for="@nameof(employee.Name)" class="control-label">Name</label>
-                <input type="text" name="@nameof(employee.Name)" class="form-control" bind="@employee.Name" />
+                <input type="text" name="@nameof(employee.Name)" class="form-control" placeholder="Name" bind="@employee.Name" />
             </div>
             <div class="form-group">
                 <label for="@nameof(employee.Gender)" class="control-label">Gender</label>
@@ -21,6 +21,18 @@
                     <option value="Female">Female</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="@nameof(employee.Department)" class="control-label">Department</label>
+                <input type="text" name="@nameof(employee.Department)" class="form-control" placeholder="Name" bind="@employee.Department" />
+            </div>
+            <div class="form-group">
+                <label for="@nameof(employee.City)" class="control-label">City</label>
+                <input type="text" name="@nameof(employee.City)" class="form-control" placeholder="Name" bind="@employee.City" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-sm btn-primary" onclick="@(async ()=> await CreateEmployee())">Save</button>
+                <button type="button" class="btn btn-sm btn-warning" onclick="@Cancel">Cancel</button>
+            </div>
         </form>
     </div>
 </div>
@@ -29,4 +41,15 @@
 
 @functions{
     Employee employee = new Employee();
+
+    protected async Task CreateEmployee()
+    {
+        await httpClient.SendJsonAsync(HttpMethod.Post, "/api/employees", employee);
+        uriHelper.NavigateTo("/employees");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("/employees");
+    }
 }

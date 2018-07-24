@@ -42,6 +42,8 @@ namespace HelloBlazor.CRUD.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Employee employee)
         {
+            await Task.Delay(3 * 1000);
+
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
