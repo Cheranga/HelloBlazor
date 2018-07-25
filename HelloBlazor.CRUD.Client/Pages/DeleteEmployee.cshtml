@@ -1,5 +1,47 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@page "/employees/delete/{EmpId}"
+
+@using HelloBlazor.CRUD.Shared.Models
+
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper uriHelper
+
+@if (employee != null)
+{
+<div class="panel panel-warning">
+    <div class="panel-heading">Are you sure you want to delete?</div>
+    <div class="panel-body">
+        <p>Confirming this will delete @employee.Name from the system.</p>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-sm btn-danger" onclick="@(async ()=> await DeleteEmployeeAsync())">Delete</button>
+        <button class="btn btn-sm btn-info" onclick="@Cancel">Cancel</button>
+    </div>
+</div>
+}
+else
+{
+    <p class="lead">Loading...</p>
+}
+
+@functions{
+    [Parameter]
+    protected string EmpId { get; set; }
+
+    Employee employee = null;
+
+    protected override async Task OnInitAsync()
+    {
+        employee = await httpClient.GetJsonAsync<Employee>($"/api/employees/{EmpId}");
+    }
+
+    private async Task DeleteEmployeeAsync()
+    {
+        await httpClient.DeleteAsync($"/api/employees/{EmpId}");
+        uriHelper.NavigateTo("/employees");
+    }
+
+    private void Cancel()
+    {
+        uriHelper.NavigateTo("/employees");
+    }
 }
