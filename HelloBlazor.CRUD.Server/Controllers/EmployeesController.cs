@@ -42,8 +42,6 @@ namespace HelloBlazor.CRUD.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Employee employee)
         {
-            await Task.Delay(3 * 1000);
-
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -53,8 +51,8 @@ namespace HelloBlazor.CRUD.Server.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody]Employee employee)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]Employee employee)
         {
             if(!ModelState.IsValid)
             {

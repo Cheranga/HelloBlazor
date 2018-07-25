@@ -1,5 +1,72 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@page "/employees/edit/{EmpId}"
+@using System.Net.Http
+@using HelloBlazor.CRUD.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Components
+
+@inject HttpClient  httpClient
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper uriHelper
+
+@if (employee != null)
+{
+    <h1>Edit Employee</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form>
+                <div class="form-group">
+                    <label for="@nameof(employee.Name)" class="control-label">Name</label>
+                    <input type="text" name="@nameof(employee.Name)" class="form-control" placeholder="Name" bind="@employee.Name" />
+                </div>
+                <div class="form-group">
+                    <label for="@nameof(employee.Gender)" class="control-label">Gender</label>
+                    <select name="@nameof(employee.Gender)" class="form-control" bind="@employee.Gender">
+                        <option value="">--SELECT--</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="@nameof(employee.Department)" class="control-label">Department</label>
+                    <input type="text" name="@nameof(employee.Department)" class="form-control" placeholder="Name" bind="@employee.Department" />
+                </div>
+                <div class="form-group">
+                    <label for="@nameof(employee.City)" class="control-label">City</label>
+                    <input type="text" name="@nameof(employee.City)" class="form-control" placeholder="Name" bind="@employee.City" />
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="@(async () => await EditEmployee())">Save</button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="@Cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+else
+{
+    <p class="lead">Loading...</p>
+}
+
+@functions{
+
+    [Parameter]
+    protected string EmpId { get; set; }
+
+    Employee employee = null;
+
+    protected override async Task OnInitAsync()
+    {
+        employee = await httpClient.GetJsonAsync<Employee>($"/api/employees/{EmpId}");
+    }
+
+    protected async Task EditEmployee()
+    {
+        await httpClient.SendJsonAsync(HttpMethod.Put, $"/api/employees", employee);
+        uriHelper.NavigateTo("/employees");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("/employees");
+    }
 }
